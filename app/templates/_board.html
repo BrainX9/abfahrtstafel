@@ -1,0 +1,40 @@
+<header class="head">
+  <h1><span class="head-label">Abfahrt</span> {{ board.title }}</h1>
+  <div id="clock" class="clock"></div>
+</header>
+
+{% if board.error %}
+<p class="error">Daten nicht aktuell – {{ board.error }}</p>
+{% endif %}
+
+<div class="table" role="table">
+  <div class="row row-head" role="row">
+    <div role="columnheader">Zeit</div>
+    <div role="columnheader">Zug</div>
+    <div role="columnheader">Ziel</div>
+    <div role="columnheader" class="col-platform">Gleis</div>
+  </div>
+
+  {% for r in board.rows %}
+  <div class="row{% if r.cancelled %} cancelled{% endif %}" role="row">
+    <div class="time" role="cell">
+      <span class="time-plan">{{ r.time }}</span>
+      {% if r.delay > 0 and not r.cancelled %}<span class="time-real">{{ r.time_real }}</span>{% endif %}
+    </div>
+    <div class="line" role="cell">{{ r.line }}</div>
+    <div class="dest" role="cell">
+      <div class="dest-name">{{ r.destination }}</div>
+      {% if r.hints %}
+      <div class="hints">{{ r.hints | join(" · ") }}</div>
+      {% elif r.via %}
+      <div class="via">{{ r.via | join(" – ") }}</div>
+      {% endif %}
+    </div>
+    <div class="platform{% if r.platform_changed %} changed{% endif %}" role="cell">{{ r.platform }}</div>
+  </div>
+  {% else %}
+  <div class="empty">Zurzeit keine Abfahrten</div>
+  {% endfor %}
+</div>
+
+{% if board.updated %}<footer class="foot">Stand {{ board.updated }} · Daten: DB OpenBoards</footer>{% endif %}

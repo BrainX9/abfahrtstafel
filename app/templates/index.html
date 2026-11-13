@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Abfahrt – {{ board.title }}</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/htmx.min.js" defer></script>
+</head>
+<body>
+  <main id="board" hx-get="/board" hx-trigger="every {{ refresh }}s" hx-swap="innerHTML">
+    {% include "_board.html" %}
+  </main>
+  <script>
+    // Uhr oben rechts; läuft unabhängig vom Nachladen der Tafel.
+    function tick() {
+      const el = document.getElementById("clock");
+      if (el) el.textContent = new Date().toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
+    }
+    setInterval(tick, 1000);
+    document.addEventListener("htmx:afterSwap", tick);
+    tick();
+  </script>
+</body>
+</html>
