@@ -72,7 +72,7 @@ async def fetch_raw() -> dict:
         "DB-Client-ID": CLIENT_ID,
         "DB-Api-Key": API_KEY,
         "Content-Type": "application/json",
-        "Accept": "application/vnd.de.db.ris+json",
+        "Accept": "application/json",
     }
     async with httpx.AsyncClient(timeout=15) as client:
         resp = await client.post(API_URL, headers=headers, json=build_request_body(datetime.now(TZ)))
